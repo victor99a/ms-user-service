@@ -1,11 +1,11 @@
 ms-user-service – Pastelería Mil Sabores
 
 Microservicio de Usuarios y Autenticación
-Spring Boot 3 · Java 17 · JWT · Spring Security
+Spring Boot 3 · Java 17 · Spring Security · JWT
 
-Este microservicio gestionará el registro, login y autenticación mediante JWT para la aplicación Pastelería Mil Sabores. También provee validaciones básicas y endpoints seguros.
+Este microservicio gestiona el registro, login y autenticación mediante JWT para la aplicación Pastelería Mil Sabores. Ofrece validaciones básicas, codificación segura de contraseñas y endpoints protegidos.
 
-Funcionalidades principales
+📌 Funcionalidades principales
 
 Registro de usuarios
 
@@ -13,25 +13,26 @@ Login con generación de token JWT
 
 Validación de credenciales
 
-Codificación segura de contraseñas (BCrypt)
+Contraseñas encriptadas con BCrypt
 
-Estructura basada en controladores, servicios y repositorios
+Endpoints protegidos con JWT
 
-Compatible con API Gateway
+Arquitectura basada en capas (Controller, Service, Repository, Security)
 
-Endpoints disponibles
+Integración con API Gateway
+
+📁 Endpoints disponibles
 Autenticación (/api/auth)
 Método	Endpoint	Descripción
 POST	/api/auth/register	Registra un usuario nuevo
-POST	/api/auth/login	Retorna un JWT si las credenciales son válidas
+POST	/api/auth/login	Devuelve JWT si las credenciales son válidas
 GET	/api/protected/hello	Endpoint protegido (testing)
-Ejemplos de Request / Response
+📝 Ejemplos de Request / Response
 Registro de usuario
 
 POST /api/auth/register
 
-Request:
-
+Request
 {
   "nombre": "Victor",
   "apellido": "Barrera",
@@ -40,9 +41,7 @@ Request:
   "rol": "ADMINISTRADOR"
 }
 
-
-Response:
-
+Response
 {
   "mensaje": "Usuario registrado correctamente"
 }
@@ -51,40 +50,29 @@ Login
 
 POST /api/auth/login
 
-Request:
-
+Request
 {
   "email": "admin2@pasteleria.cl",
   "password": "123456"
 }
 
-
-Response:
-
+Response
 {
   "token": "eyJh...tu_jwt..."
 }
 
-Arquitectura del servicio
+🏗️ Arquitectura del servicio
+src/
+ ├── controller/      → Endpoints REST
+ ├── service/         → Lógica de negocio
+ ├── repository/      → Acceso a BD con Spring Data JPA
+ ├── entity/          → Entidades JPA
+ ├── security/        → JWT, filtros y configuración de seguridad
+ └── dto/             → Objetos de transferencia de datos
 
-controller/
-Contiene los endpoints de autenticación.
+🛢️ Configuración de la base de datos
 
-service/
-Lógica de negocio, validaciones, creación de usuarios y login.
-
-repository/
-Acceso a la base de datos mediante Spring Data JPA.
-
-entity/
-Mapeo de la tabla Usuario.
-
-security/
-Configuración de JWT, filtros y autenticación.
-
-Configuración de la base de datos
-
-Archivo application.properties:
+Archivo: application.properties
 
 spring.application.name=ms-user-service
 server.port=8083
@@ -96,17 +84,11 @@ spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
-Ejecución del proyecto
-
-Asegurarse de tener MySQL levantado y la base creada.
-
-Clonar el repositorio:
-
+▶️ Ejecución del proyecto
+1. Clonar el repositorio
 git clone https://github.com/tu-usuario/ms-user-service.git
 
-
-Ejecutar el proyecto:
-
+2. Ejecutar el microservicio
 ./gradlew bootRun
 
 
@@ -114,16 +96,19 @@ El servicio quedará disponible en:
 
 http://localhost:8083
 
-Integración con API Gateway
+🌐 Integración con API Gateway
 
-El API Gateway enruta las peticiones hacia este microservicio mediante:
+El Gateway enruta hacia este microservicio mediante:
 
 /api/auth/**
 
 
-El frontend se comunica únicamente con el gateway, no directamente con este microservicio.
+El frontend nunca debe llamar directamente a este servicio, solo al gateway:
 
-Tecnologías utilizadas
+http://localhost:8080/api/auth/login
+http://localhost:8080/api/auth/register
+
+🧩 Tecnologías utilizadas
 
 Java 17
 
@@ -133,18 +118,20 @@ Spring Security
 
 JWT
 
-Lombok
+BCrypt
 
 JPA / Hibernate
 
 MySQL
 
-Notas importantes
+Lombok
 
-Las contraseñas siempre se almacenan en formato encriptado (BCrypt).
+🔐 Notas importantes
 
-Las respuestas del login incluyen exclusivamente el token JWT.
+Las contraseñas se almacenan encriptadas con BCrypt, nunca en texto plano.
 
-Los endpoints protegidos requieren incluir el header:
+El login devuelve solo un token JWT, no datos del usuario.
+
+Para acceder a endpoints protegidos, se debe enviar:
 
 Authorization: Bearer TU_TOKEN
