@@ -8,6 +8,6 @@ public class TestProtectedController {
 
     @GetMapping("/api/protected/hello")
     public String hello() {
-        return "Hola, estás autenticado 😎";
+        return "Hola, estás autenticado";
     }
 }
