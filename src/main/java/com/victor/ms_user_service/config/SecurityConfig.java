@@ -23,10 +23,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())  // ⬅️ importante para evitar 403 por CSRF
+                .csrf(csrf -> csrf.disable())  // importante para evitar 403 por CSRF
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // ⬅️ register/login abiertos
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // register/login abiertos
                         .anyRequest().authenticated()                // el resto requiere token
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

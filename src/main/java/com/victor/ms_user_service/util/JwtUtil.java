@@ -18,11 +18,11 @@ public class JwtUtil {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private long expirationMs; // ejemplo: 36000000 = 10 horas
+    private long expirationMs; //  = 10 horas
 
     private Key getSigningKey() {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes); // aquí ya no tendrás WeakKey ni DecodingException
+        return Keys.hmacShaKeyFor(keyBytes); // aquí ya no WeakKey ni DecodingException
     }
 
     // email = subject del token, rol va como claim
@@ -64,7 +64,7 @@ public class JwtUtil {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            // aquí puedes loguear el error si quieres
+            // loguear error
             return false;
         }
     }
