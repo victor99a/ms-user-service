@@ -22,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse registrar(RegistroRequest request) {
 
-        // Opcional: validar que no exista el email
+        //validar que no exista el email
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("El email ya está registrado");
         }
