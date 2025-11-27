@@ -40,8 +40,9 @@ public class SecurityConfig {
                         // 🔓 SOLO login y registro públicos
                         .requestMatchers(
                                 "/api/auth/login",
-                                "/api/auth/registro"
+                                "/api/auth/register"   // ✅ nombre correcto
                         ).permitAll()
+
 
                         // 🔐 Ejemplos si quisieras endpoints internos por rol:
                         // .requestMatchers("/api/auth/admin/**").hasRole("ADMINISTRADOR")
