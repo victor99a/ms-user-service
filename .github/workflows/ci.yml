@@ -1,0 +1,37 @@
+name: CI - Build and Test (Gradle)
+
+on:
+  push:
+    branches:
+      - main      
+  pull_request:
+    branches:
+      - main      
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Descargar el código del repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2) Configurar Java (Spring Boot con Java 17)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      # 3) Dar permiso de ejecución al wrapper de Gradle (gradlew)
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 4) Ejecutar tests
+      - name: Run tests
+        run: ./gradlew test
+
+      # 5) Compilar el proyecto (build) sin volver a correr tests
+      - name: Build project
+        run: ./gradlew build -x test
